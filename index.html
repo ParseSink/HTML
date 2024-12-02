@@ -1,18 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VM Website</title>
+    <title>Document</title>
+    <!-- Google Fonts Poppins -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <style>
-        /* Default styling */
         * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* Apply dark theme styles */
+        input,
+        input:active,
+        textarea,
+        button,
+        select,
+        a,
+        a:link,
+        a:visited,
+        a:hover,
+        a:active {
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            text-decoration: none;
+            outline: none;
+        }
+
         body {
             background-color: #121212;
             color: white;
@@ -21,19 +39,138 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
         }
 
-        /* Pyramid animation */
-        .pyramid {
-          position: absolute;
-          width: 100px;
-          height: 100px;
-          transform-style: preserve-3d;
-          animation: animate 16s linear infinite;
+        /* Navbar */
+        .navbar {
+            transition: .5s ease-out;
+            position: relative;
+            z-index: 200;
+            width: 100%;
+            height: 48px;
+            background: #333333;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
+        .navbar .logo {
+            transition: 1s;
+            font-size: 1rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.801);
+            cursor: pointer;
+        }
+
+        .navbar .logo:hover {
+            transition: .5s;
+            color: #fff;
+        }
+
+        .navbar .menu-button {
+            display: inline-block;
+            position: relative;
+            z-index: 300;
+            cursor: pointer;
+        }
+
+        .navbar .menu-button:hover {
+            transition: .5s;
+            color: #fff;
+        }
+
+        /* Navbar Animation while dropdown-menu is on */
+        .navbar.while-dropdown-menu-on {
+            transition: .5s ease-in;
+            background: #000;
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            transition: .3s ease-out;
+            width: 100%;
+            height: 0vh;
+            opacity: 0%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 200;
+            background: black;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: column;
+            padding-top: 48px;
+        }
+
+        /* Dropdown Menu Slide Down Animation */
+        .dropdown-menu.active {
+            transition: .5s ease-in;
+            height: 100vh;
+            opacity: 100%;
+        }
+
+        .dropdown-menu .links {
+            display: flex;
+            justify-content: center;
+            align-items: left;
+            flex-direction: column;
+            width: 100%;
+            padding: 0 4rem;
+        }
+
+        /* Links line dividers */
+        .dropdown-menu .links a {
+            width: 100%;
+            padding: .5rem 0;
+            transition: 1s;
+            color: rgba(255, 255, 255, 0.801);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .dropdown-menu .links a:first-of-type {
+            border-top: none;
+        }
+
+        .dropdown-menu .links a:hover {
+            transition: .5s;
+            color: #fff;
+        }
+
+        .dropdown-menu .search-section {
+            display: flex;
+            justify-content: center;
+            /* align-items: left; */
+            flex-direction: column;
+            width: 100%;
+            padding: 1rem 4rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .dropdown-menu .search-section .search {
+            transition: 1s;
+            width: 100%;
+            padding: .5rem .5rem;
+            border-radius: 7px;
+            font-size: 1rem;
+            border: none;
+            background: #1d1d1f;
+            color: #fff;
+        }
+        /* TODO: Assign an onclick to the pyramid or to each side (.pyramid div span) so when the user clicks on it something happens (you could use this on the portfolio so when the user hovers on a side the name of one of my projects appear and when the user clicks the project could be opened) */
+  
+        /* TIP: To change the size of the pyramid, change the size in with, height and translateZ (translateZ should be half of width and height). You should also change the size of the shadow */
+        .pyramid {
+          position: absolute;
+          width: 50px;
+          height: 50px;
+          margin-top: 350px;
+          transform-style: preserve-3d;
+          animation: animate 16s linear infinite;
+          /* cursor: pointer; */
+        }
         @keyframes animate {
           0% {
             transform: rotateX(-30deg) rotateY(0deg);
@@ -42,12 +179,12 @@
             transform: rotateX(-30deg) rotateY(360deg);
           }
         }
-
-        /* Pause animation on hover */
+  
+        /* pause animation on hover */
         .pyramid:hover {
           animation-play-state: paused;
         }
-
+  
         .pyramid div {
           position: absolute;
           top: 0;
@@ -56,7 +193,6 @@
           height: 100%;
           transform-style: preserve-3d;
         }
-
         .pyramid div span {
           position: absolute;
           top: 0;
@@ -66,27 +202,30 @@
           transform-origin: bottom;
           background: linear-gradient(180deg, #008ad7, #104581);
           clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-          transform: rotateY(calc(90deg * var(--i))) translateZ(50px)
-            rotateX(30deg);
+          transform: rotateY(calc(90deg * var(--i))) translateZ(25px)
+            rotateX(30deg); /* 300 / 2 = 150*/
         }
-
+  
+        /* change the pyramid side color on hover */
         .pyramid div span:hover {
+          /* background: linear-gradient(180deg, #590470, #f641ff); */
           background: linear-gradient(180deg, #104581, #008ad7);
         }
-
+  
         .shadow {
           content: '';
           position: absolute;
           top: 0;
           left: 0;
-          width: 100px;
-          height: 100px;
+          width: 50px;
+          height: 50px;
           background: rgba(44, 32, 134, 0.078);
-          transform: rotateX(90deg) translateZ(-50px);
+          transform: rotateX(90deg) translateZ(-40px);
           filter: blur(7px);
-          box-shadow: 0 0 30px rgba(74, 8, 205, 0.436), 0 0 40px rgba(4, 94, 238, 0.829), 0 0 50px rgba(36, 38, 173, 0.2);
+          box-shadow: 0 0 30px rgba(74, 8, 205, 0.436),
+            0 0 40px rgba(4, 94, 238, 0.829), 0 0 50px rgba(36, 38, 173, 0.2),
+            0 0 60px rgba(6, 25, 131, 0), 0 0 rgba(16, 22, 125, 0.888);
         }
-
         .pyramid-text {
             margin-top: 50px;
             font-size: 18px;
@@ -95,18 +234,16 @@
             text-transform: uppercase;
             text-align: center;
         }
-
         .normal-text {
-            margin-top: 200px;
-            font-size: 14px;
+            margin-top: 10px;
+            font-size: 10px;
             font-weight: bold;
             color: rgba(255, 255, 255, 0.763);
             text-transform: uppercase;
             text-align: center;
         }
-
-        /* Basic styling for the link */
-        a {
+         /* Basic styling for the link */
+         a {
             color: #00BFFF; /* Default link color */
             text-decoration: none; /* Remove underline */
             font-weight: bold;
@@ -121,39 +258,79 @@
         a:active, a:focus {
             color: #FFD700; /* Color when the link is clicked or selected */
         }
+        .text2 {
+            margin-top: 50px;
+            font-size: 10px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.763);
+            text-transform: uppercase;
+            text-align: center;
+
+        }
+      
     </style>
 </head>
+
 <body>
-
-    <!-- Pyramid -->
-    <div class="pyramid">
-        <div class="shadow"></div>
-        <div>
-            <span style="--i: 0"></span>
-            <span style="--i: 1"></span>
-            <span style="--i: 2"></span>
-            <span style="--i: 3"></span>
+    <nav class="dropdown-menu">
+        <div class="search-section">
+            <input class="search" type="search" name="search" placeholder="Welcome">
         </div>
-    </div>
+            <div class="links">
+                <a href="http://20.151.66.46/">Azure Windows VM Website</a>
+                <a href="#">Azure Blob storage Static Website</a>
+                <a href="#">Computers</a>
+                <a href="#">Accessories</a>
+                <a href="#">About</a>
+            </div>
+    </nav>
+    <header class="navbar">
+        <span class="menu-button logo">Our Webpages</span>
+        <span class="brand-logo logo">Azure Project Homepage</azure></span>
+        <span class="shoping-cart-icon logo"><img src="azure.png" alt="Example Image" style="width: 38px; height:auto;"></span>
+    </header>
+    <script>
+        const menuButton = document.querySelector('.menu-button');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+        const navbar = document.querySelector('.navbar');
+        menuButton.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('active');
+            navbar.classList.toggle('while-dropdown-menu-on');
+        })
 
-    <br><br><br><br><br>
+    </script>
 
-    <!-- Hidden Easter egg (Image) -->
-    <div>
-        <img src="azure.png" alt="You Found an Easter Egg" />
-    </div>
+    <div class="pyramid">
+        <div class="shadow">
+  
+        </div>
+        <div>
+          <span style="--i: 0"></span>
+          <span style="--i: 1"></span>
+          <span style="--i: 2"></span>
+          <span style="--i: 3"></span>
+        </div>
+  
+      </div>
+      <br><br><br><br><br>
+      <div class="text2 ">
+          <img src="azure.png" alt="You Foud an easer egg">
+      </div>
 
-    <!-- Text -->
-    <div class="pyramid-text">
-        This page is a static webpage hosted on a blob
-    </div>
-
-    <br><br><br><br><br><br><br><br><br><br>
-
-    <!-- Return Link -->
-    <div class="normal-text">
-        <p><a href="home.html" target="_blank">- Return to Homepage -</a></p>
-    </div>
-
+      </div>
+          <br><br><br><br><br><br><br><br><br><br><br><br>          <br><br><br><br><br><br><br><br><br><br>
+      </div>
+  
+      <div class="pyramid-container">
+          <div class="face front"></div>
+          <div class="face right"></div>
+          <div class="face left"></div>
+          <div class="face back"></div>
+      </div>
+      <div class="normal-text">
+          <p><a href="home.html" target="_self">- Return -</a> </p>
+      </div>
+      </div>
 </body>
+
 </html>

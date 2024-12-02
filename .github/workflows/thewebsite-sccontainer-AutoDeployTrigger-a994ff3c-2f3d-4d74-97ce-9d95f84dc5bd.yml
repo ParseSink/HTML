@@ -1,0 +1,48 @@
+name: Trigger auto deployment for thewebsite-sccontainer
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ Live ]
+    paths:
+    - '**'
+    - '.github/workflows/thewebsite-sccontainer-AutoDeployTrigger-a994ff3c-2f3d-4d74-97ce-9d95f84dc5bd.yml'
+
+  # Allow manual trigger 
+  workflow_dispatch:      
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions: 
+      id-token: write #This is required for requesting the OIDC JWT Token
+      contents: read #Required when GH token is used to authenticate with private repo
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.THEWEBSITESCCONTAINER_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.THEWEBSITESCCONTAINER_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.THEWEBSITESCCONTAINER_AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }}
+          _dockerfilePathKey_: _dockerfilePath_
+          registryUrl: 
+          registryUsername: ${{ secrets.THEWEBSITESCCONTAINER_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.THEWEBSITESCCONTAINER_REGISTRY_PASSWORD }}
+          containerAppName: thewebsite-sccontainer
+          resourceGroup: ClassProject
+          imageToBuild: default/[parameters('containerAppName')]:${{ github.sha }}
+          _buildArgumentsKey_: |
+            _buildArgumentsValues_
+
+
